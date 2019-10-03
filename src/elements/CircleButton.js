@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableHighlight } from 'react-native';
 import * as Font from 'expo-font';
 import { createIconSet } from '@expo/vector-icons';
 import fontAwsome from '../../assets/fonts/fa-solid-900.ttf';
@@ -25,7 +25,7 @@ class CircleButton extends React.Component{
       }
 
     render() {
-        const {name, style, color} = this.props;
+        const {name, style, color, onPress} = this.props;
 
         let bgColor = '#E31676';
         let textColor = '#fff';
@@ -36,38 +36,45 @@ class CircleButton extends React.Component{
         }
 
         return(
-            <View style={[styles.circleButton, style, {backgroundColor: bgColor }]}>  
+          <TouchableHighlight style={[styles.container, style]} onPress={onPress} underlayColor='transparent'>
+            <View style={[styles.circleButton, {backgroundColor: bgColor }]}>  
                 {
                 this.state.fontLoaded ? (
                     <CustomIcon name={name} style={[styles.circleButtonTitle, {color: textColor }]} />
                         ) : null
                 }                
             </View>
+          </TouchableHighlight>
         );
     }
 }
 
 const styles= StyleSheet.create({
+    container: {
+      width: 48,
+      height: 48,
+      position: 'absolute',
+      bottom: 32,
+      right: 32,
+    },
+   
     circleButton: {
-        position: 'absolute',
-        bottom: 32,
-        right: 32,
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        justifyContent: 'center',
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {widdth: 0, height: 2 },
-        shadowOpacity: 0.5,
-        shadowRadius: 3,
+      width: 48,
+      height: 48,
+      borderRadius: 24,
+      justifyContent: 'center',
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: {widdth: 0, height: 2 },
+      shadowOpacity: 0.5,
+      shadowRadius: 3,
       },
     
-      circleButtonTitle: {
-        fontSize: 24,
-        lineHeight: 32,
-        fontFamily: 'FontAwsome',
-      },    
+    circleButtonTitle: {
+      fontSize: 24,
+      lineHeight: 32,
+      fontFamily: 'FontAwsome',
+    },    
 });
 
 export default CircleButton;
