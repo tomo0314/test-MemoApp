@@ -11,13 +11,9 @@ class MemoCreateScreen extends React.Component {
     }
 
     handlePress(){
-        //ちなみに、uidは以下の取得方法のほうがずっと楽
-        // const{ currentUser } = firebase.auth();
-        // db.collection(`users/${currentUser.uid}/memos/`).add({
-
-        const {params} = this.props.navigation.state;
         const db = firebase.firestore();
-        db.collection(`users/${params.currentUser.user.uid}/memos/`).add({
+        const { currentUser } = firebase.auth();
+        db.collection(`users/${currentUser.uid}/memos/`).add({
             body: this.state.body,
             createdOn: new Date(),
         })
