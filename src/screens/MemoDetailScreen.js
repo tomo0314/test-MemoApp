@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View} from 'react-native';
 import CircleButton from '../elements/CircleButton';
+import firebase from "firebase";
+
 
 const dateString = (date)=>{
     const str = date.toDate().toISOString();
@@ -25,6 +27,23 @@ class MemoDetailScreen extends React.Component{
         this.setState({memo:memo});
     }
 
+    //メモ削除のロジック
+    onPressTrash(){
+        // fireabaseから該当メモを取得する
+        const db = firebase.firestore();
+        const { currentUser } =firebase.auth();
+        db.collection(`users/${currentUser.uid}/memos`).doc(this.state.memo.key)
+        // 削除
+        .delete()
+        .then(()=>{ 
+        //前の画面に戻る
+        this.props.navigation.goBack(); 
+        })
+        .catch((error) =>{
+            console.error( error);        
+        });
+    }
+    
     render(){
         const {memo} = this.state;
 
@@ -48,6 +67,13 @@ class MemoDetailScreen extends React.Component{
                     color='white' 
                     style={styles.editButton} 
                     onPress={() => {this.props.navigation.navigate('MemoEdit', { memo, returnMemo: this.returnMemo.bind(this) }); }} 
+                />
+
+                <CircleButton 
+                    name='trash' 
+                    color='white' 
+                    style={styles.trashButton} 
+                    onPress={this.onPressTrash.bind(this)}
                 />
             </View>
         );
@@ -98,6 +124,14 @@ const styles = StyleSheet.create({
 
     editButton: {
         top: 75,
+        right: 80,
+
     },
+
+    trashButton: {
+        top: 75,
+        right: 15,
+    },
+
 });
 export default MemoDetailScreen;

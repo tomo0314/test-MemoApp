@@ -8,6 +8,7 @@ const CustomIcon = createIconSet({
     pencil: '\uf303',
     plus: '\uf067',
     check: '\uf00c',
+    trash: '\uf2ed',
     }, 'FontAwsome');
 
 class CircleButton extends React.Component{
