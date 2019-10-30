@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableHighlight, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
+import { NavigationActions, StackActions } from 'react-navigation';
 
 class LoginScreen extends React.Component {
 
@@ -9,10 +10,25 @@ class LoginScreen extends React.Component {
         password :'password2',
     }
 
+    navigateToHome(){
+        const resetAction = StackActions.reset({
+            index : 0,
+            actions: [
+                NavigationActions.navigate({ routeName: 'Home' }),
+            ],
+        });
+        this.props.navigation.dispatch(resetAction);
+
+    }
+
+    handlePress(){
+        this.props.navigation.navigate('Signup');
+    }
+
     handleSubmit(){
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-        .then((user)=>{
-            this.props.navigation.navigate('Home', { currentUser: user });
+        .then(()=>{
+            this.navigateToHome();
         })
         .catch((error)=>{
             console.log(error);
@@ -47,6 +63,12 @@ class LoginScreen extends React.Component {
                 <TouchableHighlight style={styles.button} underlayColor='#C70F66' onPress={this.handleSubmit.bind(this)}>
                     <Text style={styles.buttonTitle}>ログイン</Text>
                 </TouchableHighlight>
+
+                <TouchableOpacity style={styles.signup} onPress={this.handlePress.bind(this)}>
+                    <Text　style={styles.signupText}>
+                        アカウントをお持ちでない方はこちら
+                    </Text>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -89,6 +111,18 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
     },
+
+    signup:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginTop : 20,
+    },
+
+    signupText: {
+        fontSize: 14,
+        color: "#666666",
+    }
 });
 
 export default LoginScreen;
