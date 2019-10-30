@@ -14,6 +14,17 @@ class MemoListScreen extends React.Component {
         const{ currentUser } = firebase.auth();
         const db = firebase.firestore();
         db.collection(`users/${currentUser.uid}/memos`)
+            //firebaseをリアルタイムで取得
+            .onSnapshot((snapShot)=>{
+                const memoList = [];
+                snapShot.forEach((doc) =>{
+                    memoList.push({...doc.data(), key:doc.id });
+                })
+                this.setState({memoList: memoList });
+            })
+
+            //旧コード（notリアルタイム）
+            /*
             .get()
             .then((snapShot)=>{
                 const memoList = [];
@@ -25,6 +36,7 @@ class MemoListScreen extends React.Component {
             .catch((error)=>{
                 console.log(error);
             })
+            */
     }
 
     handlePress(){

@@ -14,8 +14,15 @@ class MemoDetailScreen extends React.Component{
     }
 
     componentWillMount(){
+        //ここのparamsは、MemoList画面から渡ってきたもの
         const { params } = this.props.navigation.state;
         this.setState({memo: params.memo});
+    }
+
+    returnMemo(memo){
+        //Edit画面からDetail画面に遷移した瞬間に発動
+        //MemoEditScreenで編集されたmemoの内容をstateに更新する
+        this.setState({memo:memo});
     }
 
     render(){
@@ -36,7 +43,12 @@ class MemoDetailScreen extends React.Component{
                     </Text>
                 </View>
 
-                <CircleButton name='pencil' color='white' style={styles.editButton} onPress={() => {this.props.navigation.navigate('MemoEdit')}} />
+                <CircleButton 
+                    name='pencil' 
+                    color='white' 
+                    style={styles.editButton} 
+                    onPress={() => {this.props.navigation.navigate('MemoEdit', { memo, returnMemo: this.returnMemo.bind(this) }); }} 
+                />
             </View>
         );
     }
